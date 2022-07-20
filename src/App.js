@@ -1,24 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import { Fragment } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import Header from "./components/Header/Header";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Chat from "./components/Chatbar/Chat";
+import Login from "./components/Auth/Login";
+import { useStateValue } from "./store/StateProvider";
+
+import "./App.css";
 
 function App() {
+  const [{ user }] = useStateValue();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      {!user ? (
+        <Login />
+      ) : (
+        <Router>
+          <div className="app">
+            {/**Header */}
+            <Header />
+
+            <div className="app__body">
+              {/**Sidebar */}
+              <Sidebar />
+
+              <Switch>
+                {/**React-Router --> Chat screen */}
+                <Route path="/room/:roomId">
+                  <Chat />
+                </Route>
+                <Route path="/">
+                  <h1>Welcome!</h1>
+                </Route>
+              </Switch>
+            </div>
+          </div>
+        </Router>
+      )}
+    </Fragment>
   );
 }
 
