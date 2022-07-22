@@ -8,19 +8,21 @@ import { useStateValue } from "../../store/StateProvider";
 import { actionTypes } from "../../store/reducer";
 
 function Login() {
-  const [/*state*/, dispatch] = useStateValue();
+  const [, /*state*/ dispatch] = useStateValue();
 
   const signIn = () => {
-    auth.signInWithPopup(provider).then((result) => {
-      console.log(result.user.displayName);
-      dispatch({
-        type: actionTypes.SET_USER,
-        user: result.user
+    auth
+      .signInWithPopup(provider)
+      .then((result) => {
+        console.log(result.user.displayName);
+        dispatch({
+          type: actionTypes.SET_USER,
+          user: result.user,
+        });
+      })
+      .catch((error) => {
+        alert(error.message);
       });
-
-    }).catch((error) => {
-      alert(error.message)
-    });
   };
 
   return (
@@ -32,8 +34,18 @@ function Login() {
         />
 
         <h1>Sign in to GMO Slack Clone</h1>
-        <p>gmo.slack.com</p>
+        <p>slack-clone-app-79241.web.app</p>
         <Button onClick={signIn}>Sign In with Google</Button>
+
+        <div className={classes.slack_link}>
+          <Button
+            href="https://slack.com/get-started#/createnew"
+            target="_blank"
+            rel="gmo-slack-clone"
+          >
+            No Account with Slack, Click here
+          </Button>
+        </div>
       </div>
     </div>
   );
